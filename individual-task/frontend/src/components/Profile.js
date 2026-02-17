@@ -71,7 +71,7 @@ function Profile() {
                 className="profile-image"
                 onError={(e) => {
                   e.target.onerror = null;
-                  e.target.src = 'https://via.placeholder.com/200';
+                  e.target.src = 'frontend/public/62441184-e377-4735-bc1d-394e39924922.jpg';
                 }}
               />
             </motion.div>
