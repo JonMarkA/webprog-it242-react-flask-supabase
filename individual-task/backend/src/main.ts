@@ -14,6 +14,7 @@ async function bootstrap() {
       'http://localhost:3000',  // Local development
       'https://webprog-it242-react-f-git-a511e6-jonathan-mark-agbulos-projects.vercel.app' // Replace with your actual Vercel URL
     ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   });
   
