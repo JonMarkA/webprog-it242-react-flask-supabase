@@ -1,4 +1,4 @@
-// src/components/Guestbook.js
+// frontend/src/components/Guestbook.js
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './Guestbook.css';
@@ -7,8 +7,9 @@ function Guestbook() {
   const [entries, setEntries] = useState([]);
   const [formData, setFormData] = useState({ name: '', message: '' });
   const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+  const API_URL = process.env.REACT_APP_API_URL || 'https://webprog-it242-react-flask-supabase-xquc.onrender.com/api';
 
   const fetchEntries = useCallback(async () => {
     try {
@@ -24,15 +25,26 @@ function Guestbook() {
   }, [fetchEntries]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (editingId) {
-      await axios.put(`${API_URL}/${editingId}`, formData);
-    } else {
-      await axios.post(API_URL, formData);
+    e.preventDefault(); // This prevents page reload
+    setLoading(true);
+    
+    try {
+      if (editingId) {
+        await axios.put(`${API_URL}/guestbook/${editingId}`, formData);
+      } else {
+        await axios.post(`${API_URL}/guestbook`, formData);
+      }
+      
+      // Clear form and refresh
+      setFormData({ name: '', message: '' });
+      setEditingId(null);
+      await fetchEntries();
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Failed to submit. Check console for details.');
+    } finally {
+      setLoading(false);
     }
-    setFormData({ name: '', message: '' });
-    setEditingId(null);
-    fetchEntries();
   };
 
   const handleEdit = (entry) => {
@@ -41,8 +53,14 @@ function Guestbook() {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`${API_URL}/${id}`);
-    fetchEntries();
+    if (window.confirm('Are you sure you want to delete this entry?')) {
+      try {
+        await axios.delete(`${API_URL}/guestbook/${id}`);
+        await fetchEntries();
+      } catch (error) {
+        console.error('Error deleting entry:', error);
+      }
+    }
   };
 
   return (
@@ -56,21 +74,27 @@ function Guestbook() {
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           required
+          disabled={loading}
         />
         <textarea
           placeholder="Your Message"
           value={formData.message}
           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
           required
+          disabled={loading}
         />
-        <button type="submit">
-          {editingId ? 'Update' : 'Sign'} Guestbook
+        <button type="submit" disabled={loading}>
+          {loading ? 'Submitting...' : editingId ? 'Update Entry' : 'Sign Guestbook'}
         </button>
         {editingId && (
-          <button onClick={() => {
-            setFormData({ name: '', message: '' });
-            setEditingId(null);
-          }}>
+          <button 
+            type="button" 
+            onClick={() => {
+              setFormData({ name: '', message: '' });
+              setEditingId(null);
+            }}
+            disabled={loading}
+          >
             Cancel
           </button>
         )}
