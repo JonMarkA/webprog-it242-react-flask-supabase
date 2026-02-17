@@ -124,23 +124,51 @@ function App() {
         transition={{ delay: 0.5 }}
       >
         <div className="container">
-          <p>© 2024 Your Portfolio. Made with Render, Vercel, and Supabase</p>
+          <p>© 2026 Jonathan Mark. Made Render, Vercel, and Supabase</p>
           <div className="social-links">
-            {['github', 'linkedin', 'twitter', 'instagram'].map((social, index) => (
-              <motion.a
-                key={social}
-                href={`https://${social}.com/yourusername`}
-                target="_blank"
-                rel="noopener noreferrer"
-                whileHover={{ y: -5, scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index }}
-              >
-                <i className={`fab fa-${social}`}></i>
-              </motion.a>
-            ))}
+            {/* GitHub */}
+            <motion.a
+              href="https://github.com/JonMarkA"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ y: -5, scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <i className="fab fa-github"></i>
+            </motion.a>
+
+            {/* LinkedIn */}
+            <motion.a
+              href="https://www.linkedin.com/in/dyonasito/"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ y: -5, scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <i className="fab fa-linkedin"></i>
+            </motion.a>
+
+            {/* Twitter/X - if you have it */}
+            <motion.a
+              href="https://facebook.com/dyonasito"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ y: -5, scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <i className="fab fa-facebook"></i>
+            </motion.a>
+
+            {/* Instagram - if you have it */}
+            <motion.a
+              href="https://www.instagram.com/dyonasito/"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ y: -5, scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              <i className="fab fa-instagram"></i>
+            </motion.a>
           </div>
         </div>
       </motion.footer>

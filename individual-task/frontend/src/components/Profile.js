@@ -10,21 +10,18 @@ function Profile() {
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   const skills = [
-    { name: 'React', level: 90, icon: 'fab fa-react', color: '#61DAFB' },
-    { name: 'Nest.js', level: 85, icon: 'fab fa-node', color: '#E0234E' },
+    { name: 'React', level: 5, icon: 'fab fa-react', color: '#61DAFB' },
+    { name: 'Nest.js', level: 10, icon: 'fab fa-node', color: '#E0234E' },
     { name: 'Supabase', level: 80, icon: 'fas fa-database', color: '#3ECF8E' },
-    { name: 'JavaScript', level: 95, icon: 'fab fa-js', color: '#F7DF1E' },
-    { name: 'TypeScript', level: 85, icon: 'fab fa-typescript', color: '#3178C6' },
-    { name: 'Node.js', level: 85, icon: 'fab fa-node-js', color: '#339933' },
-    { name: 'Python', level: 75, icon: 'fab fa-python', color: '#3776AB' },
-    { name: 'GraphQL', level: 70, icon: 'fas fa-project-diagram', color: '#E10098' }
+    { name: 'JavaScript', level: 5, icon: 'fab fa-js', color: '#F7DF1E' },
+    { name: 'TypeScript', level: 10, icon: 'fab fa-typescript', color: '#3178C6' },
+    { name: 'Node.js', level: 10, icon: 'fab fa-node-js', color: '#339933' },
+    { name: 'Python', level: 10, icon: 'fab fa-python', color: '#3776AB' },
+    { name: 'HTML/CSS', level: 90, icon: 'fa-file-code', color: '#E10098' }
   ];
 
   const stats = [
-    { value: '3+', label: 'Years Experience', icon: 'fas fa-clock' },
-    { value: '25+', label: 'Projects Completed', icon: 'fas fa-check-circle' },
-    { value: '15+', label: 'Happy Clients', icon: 'fas fa-smile' },
-    { value: '8', label: 'Certifications', icon: 'fas fa-certificate' }
+    { value: '4', label: 'Projects Completed', icon: 'fas fa-check-circle' },
   ];
 
   useEffect(() => {
@@ -80,14 +77,14 @@ function Profile() {
             </motion.div>
           </div>
 
-          <h1 className="glitch-text">Your Name</h1>
+          <h1 className="glitch-text">Jonathan Mark Agbulos</h1>
           
           <div className="typewriter">
             <TypeAnimation
               sequence={[
-                'Full Stack Developer',
+                'Gamer',
                 2000,
-                'React Specialist',
+                'IT Student',
                 2000,
                 'UI/UX Enthusiast',
                 2000,
@@ -105,9 +102,9 @@ function Profile() {
             variants={containerVariants}
           >
             {[
-              { icon: 'fas fa-map-marker-alt', text: 'San Francisco, CA' },
+              { icon: 'fas fa-map-marker-alt', text: 'Asia Pacific College' },
               { icon: 'fas fa-briefcase', text: 'Available for work' },
-              { icon: 'fas fa-graduation-cap', text: 'Computer Science' }
+              { icon: 'fas fa-graduation-cap', text: 'Arellano University' }
             ].map((badge, index) => (
               <motion.div
                 key={index}
@@ -140,9 +137,7 @@ function Profile() {
               animate={isInView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.5 }}
             >
-              Passionate full-stack developer with expertise in building modern web applications.
-              I love creating elegant solutions to complex problems and sharing knowledge with the
-              developer community. When I'm not coding, you can find me hiking or reading tech blogs.
+              Would prefer to take it easy and willing to learn.
             </motion.p>
           </motion.div>
 

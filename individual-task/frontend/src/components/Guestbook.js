@@ -157,7 +157,7 @@ function Guestbook() {
                   <input
                     id="name"
                     type="text"
-                    placeholder="John Doe"
+                    placeholder="Jonathaniel..."
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
