@@ -12,7 +12,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:3000',  // Local development
-      'https://webprog-it242-react-flask-supabase.vercel.app/' // Replace with your actual Vercel URL
+      'https://webprog-it242-react-f-git-a511e6-jonathan-mark-agbulos-projects.vercel.app' // Replace with your actual Vercel URL
     ],
     credentials: true,
   });
