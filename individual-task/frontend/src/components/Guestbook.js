@@ -1,5 +1,6 @@
 // frontend/src/components/Guestbook.js
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import './Guestbook.css';
 
@@ -8,7 +9,9 @@ function Guestbook() {
   const [formData, setFormData] = useState({ name: '', message: '' });
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [hoveredEntry, setHoveredEntry] = useState(null);
+  
+  const formRef = useRef(null);
   const API_URL = process.env.REACT_APP_API_URL || 'https://webprog-it242-react-flask-supabase-xquc.onrender.com/api';
 
   const fetchEntries = useCallback(async () => {
@@ -38,6 +41,9 @@ function Guestbook() {
       setFormData({ name: '', message: '' });
       setEditingId(null);
       await fetchEntries();
+      
+      // Scroll to top after successful submission
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('Failed to submit. Please try again.');
@@ -49,7 +55,7 @@ function Guestbook() {
   const handleEdit = (entry) => {
     setFormData({ name: entry.name, message: entry.message });
     setEditingId(entry.id);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    formRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleDelete = async (id) => {
@@ -93,144 +99,253 @@ function Guestbook() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
+  };
+
   return (
-    <div className="guestbook-container">
-      <div className="guestbook-header">
-        <h2>📖 Guestbook</h2>
-        <p>Leave a message for future visitors!</p>
-      </div>
+    <motion.div 
+      className="guestbook-container"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
+      <div className="guestbook-card">
+        <div className="guestbook-header">
+          <motion.h2
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
+          >
+            📖 Guestbook
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+          >
+            Leave a message for future visitors!
+          </motion.p>
+        </div>
 
-      <div className="guestbook-content">
-        <form onSubmit={handleSubmit} className="guestbook-form">
-          <div className="form-group">
-            <label htmlFor="name">
-              <i className="fas fa-user"></i> Your Name
-            </label>
-            <input
-              id="name"
-              type="text"
-              placeholder="John Doe"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              required
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="message">
-              <i className="fas fa-comment"></i> Your Message
-            </label>
-            <textarea
-              id="message"
-              placeholder="Write your message here..."
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              required
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-actions">
-            <button 
-              type="submit" 
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <i className="fas fa-spinner fa-spin"></i>
-                  Submitting...
-                </>
-              ) : editingId ? (
-                <>
-                  <i className="fas fa-edit"></i>
-                  Update Entry
-                </>
-              ) : (
-                <>
+        <div className="guestbook-content">
+          {/* Form */}
+          <motion.div 
+            ref={formRef}
+            className="form-container"
+            variants={itemVariants}
+          >
+            <form onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="name">
+                  <i className="fas fa-user"></i>
+                  Your Name
+                </label>
+                <div className="input-wrapper">
                   <i className="fas fa-pen"></i>
-                  Sign Guestbook
-                </>
-              )}
-            </button>
-            
-            {editingId && (
-              <button 
-                type="button" 
-                className="btn btn-secondary"
-                onClick={() => {
-                  setFormData({ name: '', message: '' });
-                  setEditingId(null);
-                }}
-                disabled={loading}
-              >
-                <i className="fas fa-times"></i>
-                Cancel
-              </button>
-            )}
-          </div>
-        </form>
-
-        <div className="entries-section">
-          <div className="entries-header">
-            <h3>
-              <i className="fas fa-comments"></i> Recent Messages
-            </h3>
-            <span className="entries-count">
-              {entries.length} {entries.length === 1 ? 'Entry' : 'Entries'}
-            </span>
-          </div>
-
-          {entries.length === 0 ? (
-            <div className="empty-state">
-              <i className="fas fa-book-open"></i>
-              <p>No entries yet. Be the first to sign the guestbook!</p>
-            </div>
-          ) : (
-            <div className="entries-list">
-              {entries.map(entry => (
-                <div key={entry.id} className="entry-card">
-                  <div className="entry-header">
-                    <div className="entry-author">
-                      <div className="author-avatar">
-                        {getInitials(entry.name)}
-                      </div>
-                      <div className="author-info">
-                        <h4>{entry.name}</h4>
-                        <span className="entry-date">
-                          <i className="far fa-calendar-alt"></i>
-                          {formatDate(entry.created_at)}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="entry-actions">
-                      <button 
-                        className="btn-icon"
-                        onClick={() => handleEdit(entry)}
-                        title="Edit"
-                      >
-                        <i className="fas fa-edit"></i>
-                      </button>
-                      <button 
-                        className="btn-icon delete"
-                        onClick={() => handleDelete(entry.id)}
-                        title="Delete"
-                      >
-                        <i className="fas fa-trash"></i>
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <p className="entry-message">{entry.message}</p>
+                  <input
+                    id="name"
+                    type="text"
+                    placeholder="John Doe"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    disabled={loading}
+                  />
                 </div>
-              ))}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="message">
+                  <i className="fas fa-comment"></i>
+                  Your Message
+                </label>
+                <textarea
+                  id="message"
+                  placeholder="Write your message here..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  required
+                  disabled={loading}
+                />
+              </div>
+
+              <div className="form-actions">
+                <motion.button 
+                  type="submit" 
+                  className="btn btn-primary"
+                  disabled={loading}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {loading ? (
+                    <>
+                      <i className="fas fa-spinner fa-spin"></i>
+                      Submitting...
+                    </>
+                  ) : editingId ? (
+                    <>
+                      <i className="fas fa-edit"></i>
+                      Update Entry
+                    </>
+                  ) : (
+                    <>
+                      <i className="fas fa-pen"></i>
+                      Sign Guestbook
+                    </>
+                  )}
+                </motion.button>
+                
+                {editingId && (
+                  <motion.button 
+                    type="button" 
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setFormData({ name: '', message: '' });
+                      setEditingId(null);
+                    }}
+                    disabled={loading}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <i className="fas fa-times"></i>
+                    Cancel
+                  </motion.button>
+                )}
+              </div>
+            </form>
+          </motion.div>
+
+          {/* Entries Section */}
+          <motion.div 
+            className="entries-section"
+            variants={itemVariants}
+          >
+            <div className="entries-header">
+              <h3>
+                <i className="fas fa-comments"></i>
+                Recent Messages
+              </h3>
+              <motion.span 
+                className="entries-count"
+                key={entries.length}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring" }}
+              >
+                {entries.length} {entries.length === 1 ? 'Entry' : 'Entries'}
+              </motion.span>
             </div>
-          )}
+
+            <AnimatePresence mode="popLayout">
+              {entries.length === 0 ? (
+                <motion.div 
+                  className="empty-state"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <i className="fas fa-book-open"></i>
+                  <p>No entries yet. Be the first to sign the guestbook!</p>
+                  <motion.button 
+                    className="btn btn-primary"
+                    onClick={() => formRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <i className="fas fa-pen"></i>
+                    Write Message
+                  </motion.button>
+                </motion.div>
+              ) : (
+                <motion.div 
+                  className="entries-grid"
+                  variants={containerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {entries.map((entry, index) => (
+                    <motion.div
+                      key={entry.id}
+                      className="entry-card"
+                      variants={itemVariants}
+                      layout
+                      whileHover={{ scale: 1.02, x: 10 }}
+                      onHoverStart={() => setHoveredEntry(entry.id)}
+                      onHoverEnd={() => setHoveredEntry(null)}
+                    >
+                      <div className="entry-header">
+                        <div className="entry-author">
+                          <motion.div 
+                            className="author-avatar"
+                            animate={hoveredEntry === entry.id ? { 
+                              rotate: [0, 10, -10, 0],
+                              scale: [1, 1.1, 1]
+                            } : {}}
+                            transition={{ duration: 0.5 }}
+                          >
+                            {getInitials(entry.name)}
+                          </motion.div>
+                          <div className="author-info">
+                            <h4>{entry.name}</h4>
+                            <span className="entry-date">
+                              <i className="far fa-calendar-alt"></i>
+                              {formatDate(entry.created_at)}
+                            </span>
+                          </div>
+                        </div>
+                        
+                        <div className="entry-actions">
+                          <motion.button 
+                            className="btn-icon edit"
+                            onClick={() => handleEdit(entry)}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            title="Edit"
+                          >
+                            <i className="fas fa-edit"></i>
+                          </motion.button>
+                          <motion.button 
+                            className="btn-icon delete"
+                            onClick={() => handleDelete(entry.id)}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            title="Delete"
+                          >
+                            <i className="fas fa-trash"></i>
+                          </motion.button>
+                        </div>
+                      </div>
+                      
+                      <motion.p 
+                        className="entry-message"
+                        animate={hoveredEntry === entry.id ? { 
+                          borderLeftColor: ['var(--primary)', 'var(--secondary)', 'var(--primary)']
+                        } : {}}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        {entry.message}
+                      </motion.p>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
