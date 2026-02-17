@@ -1,5 +1,5 @@
 // src/components/Guestbook.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import './Guestbook.css';
 
@@ -10,14 +10,18 @@ function Guestbook() {
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
+  const fetchEntries = useCallback(async () => {
+    try {
+      const response = await axios.get(`${API_URL}/guestbook`);
+      setEntries(response.data);
+    } catch (error) {
+      console.error('Error fetching entries:', error);
+    }
+  }, [API_URL]);
+
   useEffect(() => {
     fetchEntries();
-  }, []);
-
-  const fetchEntries = async () => {
-    const response = await axios.get(`${API_URL}/guestbook`);
-    setEntries(response.data);
-  };
+  }, [fetchEntries]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
