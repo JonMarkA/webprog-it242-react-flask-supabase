@@ -66,7 +66,7 @@ function Profile() {
               whileTap={{ scale: 0.95 }}
             >
               <img 
-                src="frontend/public/62441184-e377-4735-bc1d-394e39924922.jpg" 
+                src="/62441184-e377-4735-bc1d-394e39924922.jpg" 
                 alt="Profile" 
                 className="profile-image"
                 onError={(e) => {
