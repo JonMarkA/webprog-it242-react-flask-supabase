@@ -47,14 +47,11 @@ function App() {
         <div className="container">
           <p>&copy; 2024 Your Portfolio. Powered by React & Vercel</p>
           <div className="social-links">
-            <a href="#" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/JonMarkA" target="_blank" rel="noopener noreferrer">
               <i className="fab fa-github"></i>
             </a>
-            <a href="#" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.linkedin.com/in/dyonasito/" target="_blank" rel="noopener noreferrer">
               <i className="fab fa-linkedin"></i>
-            </a>
-            <a href="#" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-twitter"></i>
             </a>
           </div>
         </div>

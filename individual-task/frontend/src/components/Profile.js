@@ -1,23 +1,17 @@
 // frontend/src/components/Profile.js
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './Profile.css';
 
 function Profile() {
-  const [skills, setSkills] = useState([
-    { name: 'React', level: 90, icon: 'fab fa-react' },
-    { name: 'Nest.js', level: 85, icon: 'fab fa-node' },
+  // Removed setSkills and setStats since they're not being used
+  const skills = [
     { name: 'Supabase', level: 80, icon: 'fas fa-database' },
-    { name: 'JavaScript', level: 95, icon: 'fab fa-js' },
-    { name: 'HTML/CSS', level: 90, icon: 'fab fa-css3' },
-    { name: 'Node.js', level: 85, icon: 'fab fa-node-js' }
-  ]);
+    { name: 'HTML/CSS', level: 90, icon: 'fab fa-css3' }
+  ];
 
-  const [stats, setStats] = useState([
-    { value: '3+', label: 'Years Experience' },
-    { value: '20+', label: 'Projects' },
-    { value: '15+', label: 'Clients' },
-    { value: '5', label: 'Certifications' }
-  ]);
+  const stats = [
+    { value: '3', label: 'Projects' },
+  ];
 
   // Animate skill bars on mount
   useEffect(() => {
@@ -44,12 +38,12 @@ function Profile() {
             }}
           />
         </div>
-        <h1>Your Name</h1>
-        <p className="profile-title">Full Stack Developer</p>
+        <h1>Jonathan Mark Agbulos</h1>
+        <p className="profile-title">IT Student</p>
         <div className="profile-badges">
-          <span className="badge">📍 San Francisco, CA</span>
+          <span className="badge">📍 Asia Pacific College</span>
           <span className="badge">💼 Available for work</span>
-          <span className="badge">🎓 Computer Science</span>
+          <span className="badge">🎓 Arellano University Jose Abad Santos Campus</span>
         </div>
       </div>
 
@@ -59,9 +53,7 @@ function Profile() {
         <div className="bio-section">
           <h2>About Me</h2>
           <p>
-            Passionate full-stack developer with expertise in building modern web applications.
-            I love creating elegant solutions to complex problems and sharing knowledge with the
-            developer community. When I'm not coding, you can find me hiking or reading tech blogs.
+            I just enjoy and prefer to be on easy mode
           </p>
         </div>
 
