@@ -8,14 +8,14 @@ function Guestbook() {
   const [formData, setFormData] = useState({ name: '', message: '' });
   const [editingId, setEditingId] = useState(null);
 
-  const API_URL = 'http://localhost:3001/api/guestbook';
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
   useEffect(() => {
     fetchEntries();
   }, []);
 
   const fetchEntries = async () => {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(`${API_URL}/guestbook`);
     setEntries(response.data);
   };
 

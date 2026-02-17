@@ -1,12 +1,23 @@
-// main.ts
+// backend/src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+  // Important: Use PORT from environment or default to 3001
+  const port = process.env.PORT || 3001;
+  
+  // Enable CORS for your Vercel frontend URL (after deployment)
   app.enableCors({
-    origin: 'http://localhost:3000', // React app URL
+    origin: [
+      'http://localhost:3000',  // Local development
+      'https://your-frontend.vercel.app' // Replace with your actual Vercel URL
+    ],
+    credentials: true,
   });
-  await app.listen(3001);
+  
+  await app.listen(port);
+  console.log(`Backend running on port ${port}`);
 }
 bootstrap();
