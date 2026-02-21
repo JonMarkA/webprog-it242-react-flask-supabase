@@ -1,6 +1,6 @@
 # Individual Task — Personal Profile / Portfolio
 
-**Course:** IT242 — Web Programming  
+**Course:** IT242 — WEBPROG  
 **Repository:** [webprog-it242-react-flask-supabase](https://github.com/JonMarkA/webprog-it242-react-flask-supabase)  
 **Folder:** `individual-task/`
 
@@ -170,6 +170,6 @@ The backend API will be available at `http://localhost:5000`.
 
 ## Author
 
-**JonMarkA**  
-IT242 — Web Programming  
+**Jonathan Mark Agbulos**  
+IT242 — WEBPROG  
 [GitHub Profile](https://github.com/JonMarkA)
